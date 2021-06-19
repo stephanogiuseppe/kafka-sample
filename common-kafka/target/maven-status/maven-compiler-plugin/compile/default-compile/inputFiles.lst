@@ -1,0 +1,6 @@
+/Users/stephanogiuseppe/Documents/jvm-projects/products/common-kafka/src/main/java/br/com/stephanogiuseppe/ecommerce/GsonDeserializer.java
+/Users/stephanogiuseppe/Documents/jvm-projects/products/common-kafka/src/main/java/br/com/stephanogiuseppe/ecommerce/GsonSerializer.java
+/Users/stephanogiuseppe/Documents/jvm-projects/products/common-kafka/src/main/java/br/com/stephanogiuseppe/ecommerce/KafkaService.java
+/Users/stephanogiuseppe/Documents/jvm-projects/products/common-kafka/src/main/java/br/com/stephanogiuseppe/ecommerce/ConsumerFunction.java
+/Users/stephanogiuseppe/Documents/jvm-projects/products/common-kafka/src/main/java/br/com/stephanogiuseppe/ecommerce/Email.java
+/Users/stephanogiuseppe/Documents/jvm-projects/products/common-kafka/src/main/java/br/com/stephanogiuseppe/ecommerce/KafkaDispatcher.java
