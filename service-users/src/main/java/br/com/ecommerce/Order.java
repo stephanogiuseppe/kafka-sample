@@ -1,4 +1,4 @@
-package br.com.stephanogiuseppe.ecommerce;
+package br.com.ecommerce;
 
 import java.math.BigDecimal;
 
@@ -12,5 +12,9 @@ public class Order {
         this.orderId = orderId;
         this.value = value;
         this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
