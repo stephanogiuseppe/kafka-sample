@@ -8,10 +8,9 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-public class   NewOrderServlet extends HttpServlet {
+public class GenerateReportServlet extends HttpServlet {
 
-    private final KafkaDispatcher<Order> orderKafkaDispatcher = new KafkaDispatcher<>();
-    private final KafkaDispatcher<String> emKafkaDispatcher = new KafkaDispatcher<>();
+    private final KafkaDispatcher<String> batchDispatcher = new KafkaDispatcher<>();
 
     @Override
     public void init() throws ServletException {
@@ -21,24 +20,17 @@ public class   NewOrderServlet extends HttpServlet {
     @Override
     public void destroy() {
         super.destroy();
-        orderKafkaDispatcher.close();
-        emKafkaDispatcher.close();
+        batchDispatcher.close();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            // @TODO: security issues
-            var email = req.getParameter("email");
-            var order = createOrder(email, req.getParameter("amount"));
-            orderKafkaDispatcher.send("ECOMMERCE_NEW_ORDER", email, order);
+            batchDispatcher.send("SEND_MESSAGE_TO_ALL_USERS", "USER_GENERATE_READING_REPORT", "USER_GENERATE_READING_REPORT");
 
-            var emailBody = "Thank you for your order! We are processing your order!";
-            emKafkaDispatcher.send("ECOMMERCE_SEND_EMAIL", email, emailBody);
-
-            System.out.println("New Order sent successfully.");
+            System.out.println("Sent generate report to all users.");
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().println("New Order sent");
+            resp.getWriter().println("Report requests generated");
         } catch (ExecutionException | InterruptedException e) {
             throw new ServletException(e);
         }
