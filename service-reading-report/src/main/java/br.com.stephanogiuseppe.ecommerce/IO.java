@@ -8,7 +8,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 
 public class IO {
-    public static void copyTo(Path source, File target) throws Exception {
+    public static void copyTo(Path source, File target) throws IOException {
         target.getParentFile().mkdirs();
         Files.copy(source, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }

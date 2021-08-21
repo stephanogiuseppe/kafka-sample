@@ -26,7 +26,11 @@ public class GenerateReportServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            batchDispatcher.send("SEND_MESSAGE_TO_ALL_USERS", "USER_GENERATE_READING_REPORT", "USER_GENERATE_READING_REPORT");
+            batchDispatcher.send(
+                    "SEND_MESSAGE_TO_ALL_USERS",
+                    "USER_GENERATE_READING_REPORT",
+                    new CorrelationId(GenerateReportServlet.class.getSimpleName()),
+                    "ECOMMERCE_USER_GENERATE_READING_REPORT");
 
             System.out.println("Sent generate report to all users.");
             resp.setStatus(HttpServletResponse.SC_OK);
@@ -34,10 +38,5 @@ public class GenerateReportServlet extends HttpServlet {
         } catch (ExecutionException | InterruptedException e) {
             throw new ServletException(e);
         }
-    }
-
-    private static Order createOrder(String email, String amount) {
-        var orderId = UUID.randomUUID().toString();
-        return new Order(orderId, amount, email);
     }
 }

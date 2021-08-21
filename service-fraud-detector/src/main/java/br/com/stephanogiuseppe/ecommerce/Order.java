@@ -5,16 +5,17 @@ import java.math.BigDecimal;
 public class Order {
 
     private final String orderId;
-    private final BigDecimal value;
+    private final BigDecimal amount;
     private String email;
 
-    public Order(String orderId, BigDecimal value) {
+    public Order(String orderId, BigDecimal amount, String email) {
         this.orderId = orderId;
-        this.value = value;
+        this.amount = amount;
+        this.email = email;
     }
 
-    public BigDecimal getValue() {
-        return value;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
     public String getEmail() { return email; }
@@ -23,7 +24,7 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "orderId='" + orderId + '\'' +
-                ", value=" + value +
+                ", amount=" + amount +
                 ", email='" + email + '\'' +
                 '}';
     }

@@ -2,6 +2,7 @@ package br.com.ecommerce;
 
 import br.com.stephanogiuseppe.ecommerce.KafkaDispatcher;
 import br.com.stephanogiuseppe.ecommerce.KafkaService;
+import br.com.stephanogiuseppe.ecommerce.Message;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.sql.Connection;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class BatchSendMessageService {
 
@@ -19,40 +21,45 @@ public class BatchSendMessageService {
         String url = "jdbc:sqlite:target/users_database.db";
         connection = DriverManager.getConnection(url);
         try {
-            connection.createStatement().execute("create table Users (uuid varchar(200) primary key, email varchar(200))");
-        } catch (SQLException e) {
-            e.printStackTrace();
+            connection.createStatement().execute("create table Users (" +
+                    "uuid varchar(200) primary key," +
+                    "email varchar(200))");
+        } catch(SQLException ex) {
+            // be careful, the sql could be wrong, be reallllly careful
+            ex.printStackTrace();
         }
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException , SQLException {
         var batchService = new BatchSendMessageService();
-        try (var service = new KafkaService<>(
-                BatchSendMessageService.class.getSimpleName(),
-                "SEND_MESSAGE_TO_ALL_USERS",
+        try (var service = new KafkaService(BatchSendMessageService.class.getSimpleName(),
+                "ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS",
                 batchService::parse,
-                String.class,
-                Map.of()
-        )) {
+                Map.of())) {
             service.run();
         }
     }
 
     private final KafkaDispatcher<User> userDispatcher = new KafkaDispatcher<>();
 
-    private void parse(ConsumerRecord<String, String> record) throws SQLException, Exception {
+    private void parse(ConsumerRecord<String, Message<String>> record) throws SQLException, ExecutionException, InterruptedException {
+        System.out.println("------------------------------------------");
         System.out.println("Processing new batch");
-        System.out.println("Topic: " + record.value());
+        var message = record.value();
+        System.out.println("Topic: " + message.getPayload());
 
-        for (User user: getAllUsers()) {
-            userDispatcher.send(record.value(), user.getUuid(), user);
+        for(User user : getAllUsers()) {
+            userDispatcher.sendAsync(message.getPayload(), user.getUuid(),
+                    message.getId().continueWith(BatchSendMessageService.class.getSimpleName()),
+                    user);
+            System.out.println("Acho que enviei para " + user);
         }
     }
 
     private List<User> getAllUsers() throws SQLException {
         var results = connection.prepareStatement("select uuid from Users").executeQuery();
         List<User> users = new ArrayList<>();
-        while (results.next()) {
+        while(results.next()) {
             users.add(new User(results.getString(1)));
         }
         return users;
