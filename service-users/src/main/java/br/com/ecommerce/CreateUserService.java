@@ -1,6 +1,6 @@
 package br.com.ecommerce;
 
-import br.com.stephanogiuseppe.ecommerce.KafkaService;
+import br.com.stephanogiuseppe.ecommerce.consumer.KafkaService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.sql.Connection;

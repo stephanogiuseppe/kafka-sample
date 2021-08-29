@@ -1,21 +1,17 @@
 package br.com.stephanogiuseppe.ecommerce;
 
+import br.com.stephanogiuseppe.ecommerce.dispatcher.KafkaDispatcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class GenerateReportServlet extends HttpServlet {
 
     private final KafkaDispatcher<String> batchDispatcher = new KafkaDispatcher<>();
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-    }
 
     @Override
     public void destroy() {

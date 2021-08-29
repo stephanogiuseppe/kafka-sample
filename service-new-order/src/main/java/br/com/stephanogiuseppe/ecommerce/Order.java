@@ -8,8 +8,8 @@ public class Order {
     private final BigDecimal value;
     private final String email;
 
-    public Order(CorrelationId correlationId, BigDecimal value, String email) {
-        this.orderId = correlationId.toString();
+    public Order(String orderId, BigDecimal value, String email) {
+        this.orderId = orderId;
         this.value = value;
         this.email = email;
     }

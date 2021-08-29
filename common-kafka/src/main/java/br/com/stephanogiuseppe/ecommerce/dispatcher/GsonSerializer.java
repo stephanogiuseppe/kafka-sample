@@ -1,5 +1,7 @@
-package br.com.stephanogiuseppe.ecommerce;
+package br.com.stephanogiuseppe.ecommerce.dispatcher;
 
+import br.com.stephanogiuseppe.ecommerce.Message;
+import br.com.stephanogiuseppe.ecommerce.MessageAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.kafka.common.serialization.Serializer;

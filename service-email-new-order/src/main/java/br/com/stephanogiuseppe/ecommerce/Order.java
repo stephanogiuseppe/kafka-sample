@@ -6,7 +6,7 @@ public class Order {
 
     private final String orderId;
     private final BigDecimal amount;
-    private String email;
+    private final String email;
 
     public Order(String orderId, BigDecimal amount, String email) {
         this.orderId = orderId;
@@ -20,10 +20,6 @@ public class Order {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getOrderId() {
-        return orderId;
     }
 
     @Override

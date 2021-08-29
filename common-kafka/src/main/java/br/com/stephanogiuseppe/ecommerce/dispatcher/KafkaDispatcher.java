@@ -1,5 +1,7 @@
-package br.com.stephanogiuseppe.ecommerce;
+package br.com.stephanogiuseppe.ecommerce.dispatcher;
 
+import br.com.stephanogiuseppe.ecommerce.CorrelationId;
+import br.com.stephanogiuseppe.ecommerce.Message;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.RecordMetadata;
@@ -33,13 +35,13 @@ public class KafkaDispatcher<T> implements Closeable {
         return properties;
     }
 
-    void send(String topic, String key, CorrelationId id, T payload) throws ExecutionException, InterruptedException {
+    public void send(String topic, String key, CorrelationId id, T payload) throws ExecutionException, InterruptedException {
         Future<RecordMetadata> future = sendAsync(topic, key, id, payload);
         future.get();
     }
 
     public Future<RecordMetadata> sendAsync(String topic, String key, CorrelationId id, T payload) {
-        var value = new Message<>(id, payload);
+        var value = new Message<>(id.continueWith("_" + topic), payload);
         var record = new ProducerRecord<>(topic, key, value);
         Callback callback = (data, ex) -> {
             if (ex != null) {
